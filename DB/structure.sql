@@ -1,5 +1,5 @@
---CREATE DATABASE budgetapp;
---\c budgetapp
+-- CREATE DATABASE budgetapp;
+-- \c budgetapp
 
 CREATE TABLE users (
     id serial not null primary key,

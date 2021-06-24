@@ -6,7 +6,7 @@ const router = express.Router();
 router
     .route('/')
     .get( (req,res) => {
-        res.send('hello get /user/');
+        res.send('hello API is working Yo!!');
     });
 
 router
