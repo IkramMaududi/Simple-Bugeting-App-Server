@@ -14,24 +14,27 @@ router
     .post( async (req,res) => {
         try {
             const { actionType, inputDate, inputDetail, inputAmount, inputUsername } = req.body;
+            console.log(req.body);
             const client = await pool.connect();
-            // console.log(username);
 
             // Check whether that specific username exist, if it doesn't exist make a new one, else leave it be 
             const userExist = await client.query(
                 "SELECT * FROM users WHERE username = $1;",
                 [inputUsername]
             );
-            if ( !userExist.rowCount ) {
+            console.log(userExist.rowCount);
+
+            if ( userExist.rowCount == 0) {
                 const enterNewUser = await client.query(
-                    "INSERT INTO users (username) VALUES $1;",
+                    "INSERT INTO users (username) VALUES ($1);",
                     [inputUsername]
                 );
+                console.log(enterNewUser);
             };
 
             if (actionType === 'income') {
                 const newInsert = await client.query(
-                    "INSERT INTO income (username, submitted_date, item_name, amount) VALUES ($1, $2, $3, $4;",
+                    "INSERT INTO income (username, submitted_date, item_name, amount) VALUES ($1, $2, $3, $4);",
                     [inputUsername, inputDate, inputDetail, inputAmount]
                 );
                 res.json({
@@ -40,7 +43,7 @@ router
                 });
             } else if (actionType === 'expense') {
                 const newInsert = await client.query(
-                    "INSERT INTO expense (username, submitted_date, item_name, amount) VALUES ($1, $2, $3, $4;",
+                    "INSERT INTO expense (username, submitted_date, item_name, amount) VALUES ($1, $2, $3, $4);",
                     [inputUsername, inputDate, inputDetail, inputAmount]
                 );
                 res.json({
@@ -82,7 +85,7 @@ router
             };
             
             res.send({
-                dataIncome = income,
+                dataIncome : income,
                 dataExpense: expense
             });
 
@@ -92,3 +95,5 @@ router
             res.status(400).send({ error: err.message}); 
         };
     });
+
+module.exports = router;
