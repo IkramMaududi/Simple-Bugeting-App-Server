@@ -59,7 +59,7 @@ router
 
 router
     .route('/showall')
-    .get( async (req,res) => {
+    .post( async (req,res) => {
         try {
             const {inputUsername} = req.body;
             const client = await pool.connect();
@@ -84,11 +84,11 @@ router
                 expense = userExpense.rows
             };
             
+            console.log(income, expense);
             res.send({
                 dataIncome : income,
                 dataExpense: expense
             });
-
 
             client.release();
         } catch (err) {
